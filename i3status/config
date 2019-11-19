@@ -1,0 +1,72 @@
+general {
+        output_format = "i3bar"
+        colors = false
+        markup = pango
+        interval = 5
+        color_good = '#2f343f'
+		    color_degraded = '#ebcb8b'
+		    color_bad = '#ba5e57'
+}
+
+order += "cpu_temperature 0"
+order += "wireless _first_"
+order += "ethernet _first_"
+order += "run_watch VPN"
+order += "battery all"
+order += "load"
+order += "disk /"
+order += "tztime local"
+order += "volume master"
+
+cpu_temperature 0 {
+        format = "<span background='#bf616a'> CPU: %degrees °C </span>"
+        path = "/sys/class/thermal/thermal_zone0/temp"
+}
+
+wireless _first_ {
+        format_up = "<span background='#b48ead'> 📶%quality on %essid @ %ip </span>"
+        format_down = "<span background='#b48ead'> 📶Disconnected </span>"
+}
+
+ethernet _first_ {
+        format_up = "<span background='#88c0d0'> 🔗 %ip </span>"
+        format_down = "<span background='#88c0d0'> 🔗 Disconnected </span>"
+}
+
+run_watch VPN {
+          pidfile = "/var/run/vpnc/pid"
+          format_down = "<span background='#a3be8c'> %title: Disconnected </span>"
+          format = "<span background='#a3be8c'> %title: %status </span>"
+}
+
+battery all {
+	      last_full_capacity = true
+        format = "<span background='#b4d1ce'> 🔋 %status %percentage|%remaining </span>"
+        format_down = "No Battery"
+        status_chr = "Charging"
+        status_bat = "Battery"
+        status_unk = "Unknown"
+        status_full = "Charged"
+        low_threshold = 10
+}
+
+load {
+        format = "<span background='#f59335'> 💻 %5min Load </span>"
+}
+
+disk "/" {
+        format = "<span background='#fec7cd'> 💾 %free Free </span>"
+}
+
+tztime local {
+		format = "<span background='#81a1c1'> %time </span>"
+		format_time = "🕔 %a %-d %b %H:%M"
+}
+
+volume master {
+        format = "<span background='#ebcb8b'> 🔉 %volume </span>"
+        format_muted = "<span background='#ebcb8b'> 🔈 Muted </span>"
+        device = "default"
+        mixer = "Master"
+        mixer_idx = 0
+}
