@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 run_on_startup ()
 {
     # Add all of the monitor sizes we might need
@@ -20,14 +22,14 @@ run_on_startup ()
 
 
 # increase screen brightness
-inc_brightness() 
+inc_brightness()
 {
     BRIGHTNESS=`xrandr --verbose | grep -m 1 -i brightness | cut -f2 -d ' '`
-    NEW_BRIGHT=$(bc <<< "$BRIGHTNESS + 0.1")
-    if [[ $(bc <<< "1.0 <= $NEW_BRIGHT") -eq 1 ]]; then  # We have reached max brightness; don't go farther
+    NEW_BRIGHT=$( bc <<< "$BRIGHTNESS + 0.05" )
+    if [[ $( bc <<< "1.0 <= $NEW_BRIGHT" ) -eq 1 ]]; then  # We have reached max brightness; don't go farther
         xrandr --output eDP-1 --brightness 1.0
         echo 1.0 > /home/brandon/.config/brightness
-    elif [[ $(bc <<< "0.0 >= $NEW_BRIGHT") -eq 1 ]]; then  # We have reached min brightness; don't go farther
+    elif [[ $( bc <<< "0.0 >= $NEW_BRIGHT" ) -eq 1 ]]; then  # We have reached min brightness; don't go farther
         xrandr --output eDP-1 --brightness 0.0
         echo 0.0 > /home/brandon/.config/brightness
     else
@@ -39,11 +41,11 @@ inc_brightness()
 dec_brightness ()
 {
     BRIGHTNESS=`xrandr --verbose | grep -m 1 -i brightness | cut -f2 -d ' '`
-    NEW_BRIGHT=$(bc <<< "$BRIGHTNESS - 0.1")
-    if [[ $(bc <<< "1.0 <= $NEW_BRIGHT") -eq 1 ]]; then  # We have reached max brightness; don't go farther
+    NEW_BRIGHT=$( bc <<< "$BRIGHTNESS - 0.05" )
+    if [[ $( bc <<< "1.0 <= $NEW_BRIGHT" ) -eq 1 ]]; then  # We have reached max brightness; don't go farther
         xrandr --output eDP-1 --brightness 1.0
         echo 1.0 > /home/brandon/.config/brightness
-    elif [[ $(bc <<< "0.0 >= $NEW_BRIGHT") -eq 1 ]]; then  # We have reached min brightness; don't go farther
+    elif [[ $( bc <<< "0.0 >= $NEW_BRIGHT" ) -eq 1 ]]; then  # We have reached min brightness; don't go farther
         xrandr --output eDP-1 --brightness 0.0
         echo 0.0 > /home/brandon/.config/brightness
     else
@@ -51,3 +53,14 @@ dec_brightness ()
         echo $NEW_BRIGHT > /home/brandon/.config/brightness
     fi
 }
+
+
+
+##### ########## ########## ########## #####
+if [[ "$1" = "-inc_brightness" ]]; then 
+    inc_brightness
+elif [[ "$1" = "-dec_brightness" ]]; then 
+    dec_brightness
+elif [[ "$1" = "-run_on_startup" ]]; then 
+    run_on_startup
+fi

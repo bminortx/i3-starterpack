@@ -25,18 +25,18 @@ cpu_temperature 0 {
 
 wireless _first_ {
         format_up = "<span background='#b48ead'> 📶%quality on %essid @ %ip </span>"
-        format_down = "<span background='#b48ead'> 📶Disconnected </span>"
+        format_down = "<span background='#b48ead'> 📶 - </span>"
 }
 
 ethernet _first_ {
         format_up = "<span background='#88c0d0'> 🔗 %ip </span>"
-        format_down = "<span background='#88c0d0'> 🔗 Disconnected </span>"
+        format_down = "<span background='#88c0d0'> 🔗 - </span>"
 }
 
 run_watch VPN {
-          pidfile = "/var/run/vpnc/pid"
-          format_down = "<span background='#a3be8c'> %title: Disconnected </span>"
-          format = "<span background='#a3be8c'> %title: %status </span>"
+        pidfile = "/var/run/vpnc/pid"
+        format = "<span background='#a3be8c'> %title %status </span>"
+        format_down = "<span background='#a3be8c'> %title - </span>"
 }
 
 battery all {
